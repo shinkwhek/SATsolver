@@ -24,14 +24,30 @@ impl Lexer {
             }
         }
 
-        let mut lines = file_body.lines().collect::<Vec<&str>>();
+        let lines = file_body.lines().collect::<Vec<&str>>();
 
         let mut without_comment = lines
             .into_iter()
             .filter(|s| s.chars().nth(0) != Some('c'))
             .collect::<Vec<&str>>();
 
-        without_comment.iter().map(Lexer::parse_line).collect()
+        let p_tags = without_comment
+            .clone()
+            .into_iter()
+            .filter(|s| s.chars().nth(0) == Some('p'))
+            .collect::<Vec<&str>>();
+
+        if p_tags.len() == 0 || p_tags.len() > 1 {
+            println!("error: there must be only one row with 'p'");
+            ::std::process::exit(1);
+        }
+
+        let without_p = without_comment
+            .into_iter()
+            .filter(|s| s.chars().nth(0) != Some('p'))
+            .collect::<Vec<&str>>();
+
+        without_p.iter().map(Lexer::parse_line).collect()
     }
 
     fn parse_line(s: &&str) -> Vec<isize> {
