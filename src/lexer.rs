@@ -24,9 +24,14 @@ impl Lexer {
             }
         }
 
-        let lines = file_body.lines().collect::<Vec<&str>>();
+        let mut lines = file_body.lines().collect::<Vec<&str>>();
 
-        lines.iter().map(Lexer::parse_line).collect()
+        let mut without_comment = lines
+            .into_iter()
+            .filter(|s| s.chars().nth(0) != Some('c'))
+            .collect::<Vec<&str>>();
+
+        without_comment.iter().map(Lexer::parse_line).collect()
     }
 
     fn parse_line(s: &&str) -> Vec<isize> {

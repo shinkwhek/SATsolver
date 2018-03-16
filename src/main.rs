@@ -24,5 +24,6 @@ fn main() {
     };
 
     let lexed = lexer::Lexer::run(filename);
-    println!("{:?}", lexed);
+    let cnf = cnf::Cnf::new(lexed);
+    println!("{:?}", cnf);
 }
