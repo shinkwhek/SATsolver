@@ -73,6 +73,10 @@ impl Cnf {
                 .collect::<Vec<Clause>>(),
         }
     }
+
+    pub fn get_body(&self) -> &Vec<Clause> {
+        &self.body
+    }
 }
 
 #[cfg(test)]
