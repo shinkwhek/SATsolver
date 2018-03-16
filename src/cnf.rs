@@ -102,4 +102,10 @@ mod tests {
         let a = Clause::new(&vec![1]);
         assert!(a.is_unit());
     }
+
+    #[test]
+    fn show_cnf_example() {
+        let a = vec![vec![1, -2, 4], vec![-1, -3], vec![3], vec![2, 3, 4]];
+        println!("{:?}", Cnf::new(a));
+    }
 }
