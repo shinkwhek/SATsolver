@@ -1,7 +1,3 @@
-use std::io::prelude::*;
-use std::io::{BufRead, BufReader};
-use std::fs::File;
-
 #[derive(PartialEq, Clone, Debug)]
 pub enum LiteralStatus {
     Pure,
