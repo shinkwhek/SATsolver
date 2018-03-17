@@ -1,5 +1,5 @@
 mod lexer;
-mod cnf;
+mod core;
 
 extern crate clap;
 use clap::{App, Arg};
@@ -24,6 +24,6 @@ fn main() {
     };
 
     let lexed = lexer::Lexer::run(filename);
-    let cnf = cnf::Cnf::new(lexed);
+    let cnf = core::DPLL::new(lexed);
     println!("{:?}", cnf);
 }

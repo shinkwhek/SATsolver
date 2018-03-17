@@ -42,17 +42,25 @@ impl Clause {
             .collect::<Vec<Literal>>()
             .clone()
     }
+
+    pub fn is_empty(ns: &Vec<Literal>) -> bool {
+        ns.is_empty()
+    }
+
+    pub fn find(ns: &Vec<Literal>, lit: Literal) -> Option<&Literal> {
+        ns.into_iter().find(|l| *l == &lit)
+    }
 }
 
 #[derive(PartialEq, Clone, Debug)]
-pub struct Cnf {
-    pub body: Vec<Vec<Literal>>,
+pub struct DPLL {
+    pub cnf: Vec<Vec<Literal>>,
 }
 
-impl Cnf {
-    pub fn new(nss: Vec<Vec<isize>>) -> Cnf {
-        Cnf {
-            body: nss.iter()
+impl DPLL {
+    pub fn new(nss: Vec<Vec<isize>>) -> DPLL {
+        DPLL {
+            cnf: nss.iter()
                 .map(|ns| Clause::new(ns))
                 .collect::<Vec<Vec<Literal>>>(),
         }

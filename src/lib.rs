@@ -1,2 +1,2 @@
 mod lexer;
-mod cnf;
+mod core;
