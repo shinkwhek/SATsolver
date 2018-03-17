@@ -14,10 +14,12 @@ impl Clause {
         c
     }
 }
-pub struct DPLL;
 
+type Assignment = Vec<isize>;
+
+pub struct DPLL;
 impl DPLL {
-    pub fn solver(cnf: &mut Vec<Vec<isize>>, assignment: &mut Vec<isize>) -> Option<Vec<isize>> {
+    pub fn solver(cnf: &mut Vec<Vec<isize>>, assignment: &mut Assignment) -> Option<Assignment> {
         let (mut c, mut a) = DPLL::unit_propagation(cnf, assignment);
         if c.is_empty() {
             Some(a)
@@ -49,8 +51,8 @@ impl DPLL {
 
     fn unit_propagation(
         cnf: &mut Vec<Vec<isize>>,
-        assignment: &mut Vec<isize>,
-    ) -> (Vec<Vec<isize>>, Vec<isize>) {
+        assignment: &mut Assignment,
+    ) -> (Vec<Vec<isize>>, Assignment) {
         if let Some(lit) = DPLL::get_unit_literal(cnf) {
             assignment.push(lit);
 
