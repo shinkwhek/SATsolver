@@ -1,25 +1,28 @@
-pub struct Clause;
-impl Clause {
-    pub fn is_empty(clause: &Vec<isize>) -> bool {
+type Literal = isize;
+type Clause = Vec<isize>;
+type Cnf = Vec<Vec<Literal>>;
+type Assignment = Vec<Literal>;
+
+pub struct DPLLClause;
+impl DPLLClause {
+    pub fn is_empty(clause: &Clause) -> bool {
         clause.is_empty()
     }
 
-    pub fn is_unit(clause: &Vec<isize>) -> bool {
+    pub fn is_unit(clause: &Clause) -> bool {
         clause.len() == 1
     }
 
-    pub fn assign_2(clause: &Vec<isize>, lit: isize) -> Vec<isize> {
+    pub fn assign_2(clause: &Clause, lit: isize) -> Clause {
         let mut c = clause.clone();
         c.retain(|&l| l != lit);
         c
     }
 }
 
-type Assignment = Vec<isize>;
-
 pub struct DPLL;
 impl DPLL {
-    pub fn solver(cnf: &mut Vec<Vec<isize>>, assignment: &mut Assignment) -> Option<Assignment> {
+    pub fn solver(cnf: &mut Cnf, assignment: &mut Assignment) -> Option<Assignment> {
         let (mut c, mut a) = DPLL::unit_propagation(cnf, assignment);
         if c.is_empty() {
             Some(a)
@@ -40,19 +43,16 @@ impl DPLL {
         }
     }
 
-    fn assign(cnf: &Vec<Vec<isize>>, lit: isize) -> Vec<Vec<isize>> {
+    fn assign(cnf: &Cnf, lit: Literal) -> Cnf {
         let c = cnf.clone()
             .into_iter()
             .filter(|cl| !cl.into_iter().any(|l| *l == lit))
-            .map(|cl| Clause::assign_2(&cl, -lit))
+            .map(|cl| DPLLClause::assign_2(&cl, -lit))
             .collect();
         c
     }
 
-    fn unit_propagation(
-        cnf: &mut Vec<Vec<isize>>,
-        assignment: &mut Assignment,
-    ) -> (Vec<Vec<isize>>, Assignment) {
+    fn unit_propagation(cnf: &mut Cnf, assignment: &mut Assignment) -> (Cnf, Assignment) {
         if let Some(lit) = DPLL::get_unit_literal(cnf) {
             assignment.push(lit);
 
@@ -62,13 +62,13 @@ impl DPLL {
         }
     }
 
-    fn exists_empty_clause(cnf: &Vec<Vec<isize>>) -> bool {
+    fn exists_empty_clause(cnf: &Cnf) -> bool {
         cnf.into_iter().any(|cl| cl.is_empty())
     }
 
-    fn get_unit_literal(cnf: &mut Vec<Vec<isize>>) -> Option<isize> {
+    fn get_unit_literal(cnf: &mut Cnf) -> Option<Literal> {
         for clause in cnf {
-            if Clause::is_unit(clause) {
+            if DPLLClause::is_unit(clause) {
                 let i = clause[0];
                 return Some(i);
             }
@@ -76,17 +76,7 @@ impl DPLL {
         return None;
     }
 
-    fn select(cnf: &Vec<Vec<isize>>) -> isize {
+    fn select(cnf: &Cnf) -> Literal {
         cnf[0][0]
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn empty() {
-        let ns: Vec<isize> = vec![];
-        assert!(Clause::is_empty(&ns));
     }
 }
