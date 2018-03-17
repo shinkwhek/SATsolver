@@ -31,7 +31,7 @@ fn main() {
         sort(&mut result);
         println!("{:?}", result);
     } else {
-        println!("FAULT");
+        println!("UNSATISFYABLE");
     }
 }
 
