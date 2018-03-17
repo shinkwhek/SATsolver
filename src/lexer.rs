@@ -51,6 +51,9 @@ impl Lexer {
     }
 
     fn parse_line(s: &&str) -> Vec<isize> {
-        s.split(' ').map(|n| n.parse::<isize>().unwrap()).collect()
+        s.split(' ')
+            .map(|n| n.parse::<isize>().unwrap())
+            .filter(|&n| n != 0)
+            .collect()
     }
 }

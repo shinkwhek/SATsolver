@@ -19,11 +19,51 @@ fn main() {
         Some(filename) => filename,
         None => {
             app.print_help().unwrap();
+            println!("");
             ::std::process::exit(0);
         }
     };
 
-    let lexed = lexer::Lexer::run(filename);
-    let cnf = core::DPLL::new(lexed);
-    println!("{:?}", cnf);
+    let mut cnf = lexer::Lexer::run(filename);
+    let mut assignment: Vec<isize> = Vec::new();
+    if let Some(mut result) = core::DPLL::solver(&mut cnf, &mut assignment) {
+        println!("SATISFIABLE");
+        sort(&mut result);
+        println!("{:?}", result);
+    } else {
+        println!("FAULT");
+    }
+}
+
+fn sort(a: &mut Vec<isize>) {
+    quick_iter(0, a.len() - 1, a);
+}
+
+fn quick_iter(left: usize, right: usize, data: &mut Vec<isize>) {
+    if left >= right {
+        return;
+    }
+
+    let (mut lf, mut rg) = (left, right);
+    let pivot = data[(lf + rg) >> 1].abs().clone();
+    loop {
+        while data[lf].abs() < pivot {
+            lf += 1;
+        }
+        while pivot < data[rg].abs() {
+            rg -= 1;
+        }
+        if lf >= rg {
+            break;
+        }
+        data.swap(rg, lf);
+        rg -= 1;
+        lf += 1;
+    }
+    if left + 1 < lf {
+        quick_iter(left, lf - 1, data);
+    }
+    if rg + 1 < right {
+        quick_iter(rg + 1, right, data);
+    }
 }
