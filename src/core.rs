@@ -1,7 +1,3 @@
-pub struct Literal;
-
-impl Literal {}
-
 pub struct Clause;
 impl Clause {
     pub fn is_empty(clause: &Vec<isize>) -> bool {

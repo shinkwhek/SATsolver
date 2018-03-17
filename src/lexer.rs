@@ -1,8 +1,7 @@
 use std::io::prelude::*;
 use std::fs::OpenOptions;
 
-pub struct Lexer {}
-
+pub struct Lexer;
 impl Lexer {
     pub fn run(filename: &str) -> Vec<Vec<isize>> {
         let mut file = if let Ok(ok) = OpenOptions::new().read(true).open(filename) {
@@ -26,7 +25,7 @@ impl Lexer {
 
         let lines = file_body.lines().collect::<Vec<&str>>();
 
-        let mut without_comment = lines
+        let without_comment = lines
             .into_iter()
             .filter(|s| s.chars().nth(0) != Some('c'))
             .collect::<Vec<&str>>();
