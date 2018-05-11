@@ -4,6 +4,9 @@ mod core;
 extern crate clap;
 use clap::{App, Arg};
 
+extern crate ansi_term;
+use self::ansi_term::Colour;
+
 const VERSION_STR: &str = env!("CARGO_PKG_VERSION");
 
 fn main() {
@@ -27,11 +30,11 @@ fn main() {
     let mut cnf = lexer::Lexer::run(filename);
     let mut assignment: Vec<isize> = Vec::new();
     if let Some(mut result) = core::DPLL::solver(&mut cnf, &mut assignment) {
-        println!("SATISFIABLE");
+        println!("{}", Colour::Blue.bold().paint("SATISFIABLE"));
         esort(&mut result);
         println!("{:?}", result);
     } else {
-        println!("UNSATISFYABLE");
+        println!("{}", Colour::Red.bold().paint("UNSATISFYABLE"));
     }
 }
 
