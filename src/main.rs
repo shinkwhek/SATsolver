@@ -28,14 +28,14 @@ fn main() {
     let mut assignment: Vec<isize> = Vec::new();
     if let Some(mut result) = core::DPLL::solver(&mut cnf, &mut assignment) {
         println!("SATISFIABLE");
-        sort(&mut result);
+        esort(&mut result);
         println!("{:?}", result);
     } else {
         println!("UNSATISFYABLE");
     }
 }
 
-fn sort(a: &mut Vec<isize>) {
+fn esort(a: &mut Vec<isize>) {
     quick_iter(0, a.len() - 1, a);
 }
 

@@ -55,7 +55,6 @@ impl DPLL {
     fn unit_propagation(cnf: &mut Cnf, assignment: &mut Assignment) -> (Cnf, Assignment) {
         if let Some(lit) = DPLL::get_unit_literal(cnf) {
             assignment.push(lit);
-
             return DPLL::unit_propagation(&mut DPLL::assign(cnf, lit), assignment);
         } else {
             (cnf.clone(), assignment.clone())
