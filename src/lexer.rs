@@ -1,5 +1,5 @@
-use std::io::prelude::*;
 use std::fs::OpenOptions;
+use std::io::prelude::*;
 
 pub struct Lexer;
 impl Lexer {

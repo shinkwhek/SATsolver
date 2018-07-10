@@ -13,7 +13,7 @@ impl DPLLClause {
         clause.len() == 1
     }
 
-    pub fn assign_2(clause: &Clause, lit: isize) -> Clause {
+    pub fn assign_clause(clause: &Clause, lit: isize) -> Clause {
         let mut c = clause.clone();
         c.retain(|&l| l != lit);
         c
@@ -32,24 +32,22 @@ impl DPLL {
             let lit = DPLL::select(&c);
             if let Some(mut a_r) = DPLL::solver(&mut DPLL::assign(&mut c, lit), &mut a) {
                 a_r.push(lit);
-                return Some(a_r);
-            }
-            if let Some(mut a_r) = DPLL::solver(&mut DPLL::assign(&mut c, -lit), &mut a) {
+                Some(a_r)
+            } else if let Some(mut a_r) = DPLL::solver(&mut DPLL::assign(&mut c, -lit), &mut a) {
                 a_r.push(-lit);
-                return Some(a_r);
+                Some(a_r)
             } else {
-                return None;
+                None
             }
         }
     }
 
     fn assign(cnf: &Cnf, lit: Literal) -> Cnf {
-        let c = cnf.clone()
+        cnf.clone()
             .into_iter()
             .filter(|cl| !cl.into_iter().any(|l| *l == lit))
-            .map(|cl| DPLLClause::assign_2(&cl, -lit))
-            .collect();
-        c
+            .map(|cl| DPLLClause::assign_clause(&cl, -lit))
+            .collect()
     }
 
     fn unit_propagation(cnf: &mut Cnf, assignment: &mut Assignment) -> (Cnf, Assignment) {
@@ -72,7 +70,7 @@ impl DPLL {
                 return Some(i);
             }
         }
-        return None;
+        None
     }
 
     fn select(cnf: &Cnf) -> Literal {
