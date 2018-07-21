@@ -1,5 +1,5 @@
-mod lexer;
 mod core;
+mod lexer;
 
 extern crate clap;
 use clap::{App, Arg};

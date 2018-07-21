@@ -5,10 +5,6 @@ type Assignment = Vec<Literal>;
 
 pub struct DPLLClause;
 impl DPLLClause {
-    pub fn is_empty(clause: &Clause) -> bool {
-        clause.is_empty()
-    }
-
     pub fn is_unit(clause: &Clause) -> bool {
         clause.len() == 1
     }
@@ -25,21 +21,21 @@ impl DPLL {
     pub fn solver(cnf: &mut Cnf, assignment: &mut Assignment) -> Option<Assignment> {
         let (mut c, mut a) = DPLL::unit_propagation(cnf, assignment);
         if c.is_empty() {
-            Some(a)
-        } else if DPLL::exists_empty_clause(&c) {
-            None
-        } else {
-            let lit = DPLL::select(&c);
-            if let Some(mut a_r) = DPLL::solver(&mut DPLL::assign(&mut c, lit), &mut a) {
-                a_r.push(lit);
-                Some(a_r)
-            } else if let Some(mut a_r) = DPLL::solver(&mut DPLL::assign(&mut c, -lit), &mut a) {
-                a_r.push(-lit);
-                Some(a_r)
-            } else {
-                None
-            }
+            return Some(a);
         }
+        if DPLL::exists_empty_clause(&c) {
+            return None;
+        }
+        let lit = DPLL::select(&c);
+        if let Some(mut a_r) = DPLL::solver(&mut DPLL::assign(&mut c, lit), &mut a) {
+            a_r.push(lit);
+            return Some(a_r);
+        }
+        if let Some(mut a_r) = DPLL::solver(&mut DPLL::assign(&mut c, -lit), &mut a) {
+            a_r.push(-lit);
+            return Some(a_r);
+        }
+        return None;
     }
 
     fn assign(cnf: &Cnf, lit: Literal) -> Cnf {
@@ -53,8 +49,9 @@ impl DPLL {
     fn unit_propagation(cnf: &mut Cnf, assignment: &mut Assignment) -> (Cnf, Assignment) {
         if let Some(lit) = DPLL::get_unit_literal(cnf) {
             assignment.push(lit);
-            return DPLL::unit_propagation(&mut DPLL::assign(cnf, lit), assignment);
-        } 
+            let mut assigned_cnf = DPLL::assign(cnf, lit);
+            return DPLL::unit_propagation(&mut assigned_cnf, assignment);
+        }
         (cnf.clone(), assignment.clone())
     }
 

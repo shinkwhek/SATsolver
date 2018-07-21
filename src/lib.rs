@@ -1,2 +1,2 @@
-mod lexer;
 mod core;
+mod lexer;
