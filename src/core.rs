@@ -1,6 +1,6 @@
 type Literal = isize;
-type Clause = Vec<isize>;
-type Cnf = Vec<Vec<Literal>>;
+type Clause = Vec<Literal>;
+type Cnf = Vec<Clause>;
 type Assignment = Vec<Literal>;
 
 pub struct DPLLClause;
@@ -54,9 +54,8 @@ impl DPLL {
         if let Some(lit) = DPLL::get_unit_literal(cnf) {
             assignment.push(lit);
             return DPLL::unit_propagation(&mut DPLL::assign(cnf, lit), assignment);
-        } else {
-            (cnf.clone(), assignment.clone())
-        }
+        } 
+        (cnf.clone(), assignment.clone())
     }
 
     fn exists_empty_clause(cnf: &Cnf) -> bool {
