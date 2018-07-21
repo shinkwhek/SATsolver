@@ -28,7 +28,9 @@ fn main() {
     };
 
     let mut cnf = lexer::Lexer::run(filename);
+
     let mut assignment: Vec<isize> = Vec::new();
+
     if let Some(mut result) = core::DPLL::solver(&mut cnf, &mut assignment) {
         println!("{}", Colour::Blue.bold().paint("SATISFIABLE"));
         esort(&mut result);

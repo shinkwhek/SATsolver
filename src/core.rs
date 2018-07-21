@@ -5,11 +5,11 @@ type Assignment = Vec<Literal>;
 
 pub struct DPLLClause;
 impl DPLLClause {
-    pub fn is_unit(clause: &Clause) -> bool {
+    fn is_unit(clause: &Clause) -> bool {
         clause.len() == 1
     }
 
-    pub fn assign_clause(clause: &Clause, lit: isize) -> Clause {
+    fn assign_clause(clause: &Clause, lit: isize) -> Clause {
         let mut c = clause.clone();
         c.retain(|&l| l != lit);
         c
@@ -72,4 +72,48 @@ impl DPLL {
     fn select(cnf: &Cnf) -> Literal {
         cnf[0][0]
     }
+}
+
+#[test]
+fn assign_test() {
+    let a = vec![vec![1, 2, 3], vec![-1, 2, 3], vec![1, -1, 2]];
+    let lit = 1;
+    assert_eq!(DPLL::assign(&a, lit), vec![vec![2, 3]]);
+}
+
+#[test]
+fn exists_empty_clause_test() {
+    let a = vec![vec![], vec![1, 2]];
+    assert_eq!(DPLL::exists_empty_clause(&a), true);
+    let a = vec![vec![1, 2], vec![3, 4]];
+    assert_eq!(DPLL::exists_empty_clause(&a), false);
+}
+
+#[test]
+fn get_unit_literal_test() {
+    let mut a = vec![vec![1, 2], vec![3], vec![4, 5]];
+    assert_eq!(DPLL::get_unit_literal(&mut a).unwrap(), 3);
+    let mut a = vec![vec![1, 2], vec![3, 4], vec![5, 6]];
+    assert_eq!(DPLL::get_unit_literal(&mut a), None);
+}
+
+#[test]
+fn select_test() {
+    let a = vec![vec![1, 2, 3]];
+    assert_eq!(DPLL::select(&a), 1);
+}
+
+#[test]
+fn assign_clause_test() {
+    let a = vec![1, 2, 3, 1, -1, 3];
+    let lit: isize = 1;
+    assert_eq!(DPLLClause::assign_clause(&a, lit), vec![2, 3, -1, 3]);
+}
+
+#[test]
+fn is_unit_test() {
+    let a = vec![1];
+    assert_eq!(DPLLClause::is_unit(&a), true);
+    let a = vec![1, 2];
+    assert_eq!(DPLLClause::is_unit(&a), false);
 }
