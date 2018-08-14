@@ -5,7 +5,7 @@ type Cnf = Vec<Vec<isize>>;
 
 pub struct Lexer;
 impl Lexer {
-    pub fn run(filename: &str) -> Cnf {
+    pub fn new(filename: &str) -> Cnf {
         let mut file = if let Ok(ok) = OpenOptions::new().read(true).open(filename) {
             ok
         } else {

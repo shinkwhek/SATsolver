@@ -33,7 +33,7 @@ fn main() {
         }
     };
 
-    let cnf = lexer::Lexer::run(filename);
+    let cnf = lexer::Lexer::new(filename);
 
     let dpll = Dpll::new(cnf);
 
