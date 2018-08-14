@@ -10,7 +10,7 @@ type Assignment = Vec<Literal>;
 #[derive(Debug, PartialEq, Clone)]
 pub struct Dpll {
     cnf: Cnf,
-    ass: Assignment,
+    pub ass: Assignment,
 }
 
 impl Dpll {

@@ -1,6 +1,8 @@
 mod lexer;
 mod solver;
 
+use solver::Dpll;
+
 extern crate clap;
 use clap::{App, Arg};
 
@@ -27,17 +29,16 @@ fn main() {
         }
     };
 
-    let mut cnf = lexer::Lexer::run(filename);
+    let cnf = lexer::Lexer::run(filename);
+    let dpll = Dpll::new(cnf);
 
-    let mut assignment: Vec<isize> = Vec::new();
-    //
-    //    if let Some(mut result) = solver::DPLL::solver(&mut cnf, &mut assignment) {
-    //        println!("{}", Colour::Blue.bold().paint("SATISFIABLE"));
-    //        esort(&mut result);
-    //        println!("{:?}", result);
-    //    } else {
-    //        println!("{}", Colour::Red.bold().paint("UNSATISFYABLE"));
-    //    }
+    if let Some(mut result) = dpll.solver() {
+        println!("{}", Colour::Blue.bold().paint("SATISFIABLE"));
+        esort(&mut result.ass);
+        println!("{:?}", result.ass);
+    } else {
+        println!("{}", Colour::Red.bold().paint("UNSATISFYABLE"));
+    }
 }
 
 fn esort(a: &mut Vec<isize>) {
