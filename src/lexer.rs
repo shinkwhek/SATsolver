@@ -1,13 +1,15 @@
 use std::fs::OpenOptions;
 use std::io::prelude::*;
 
+type Cnf = Vec<Vec<isize>>;
+
 pub struct Lexer;
 impl Lexer {
-    pub fn run(filename: &str) -> Vec<Vec<isize>> {
+    pub fn run(filename: &str) -> Cnf {
         let mut file = if let Ok(ok) = OpenOptions::new().read(true).open(filename) {
             ok
         } else {
-            println!("error: file '{}' was not found", filename);
+            println!("the file was not found");
             ::std::process::exit(1);
         };
 
@@ -15,10 +17,7 @@ impl Lexer {
         match file.read_to_string(&mut file_body) {
             Ok(_) => (),
             Err(e) => {
-                println!(
-                    "error: an error occurred while reading file '{}'\n{}",
-                    filename, e
-                );
+                println!("an error occurred while reading file: {}", e);
                 ::std::process::exit(1);
             }
         }

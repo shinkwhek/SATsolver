@@ -1,7 +1,3 @@
-extern crate failure;
-use self::failure::err_msg;
-use self::failure::Error;
-
 type Literal = isize;
 type Clause = Vec<Literal>;
 type Cnf = Vec<Clause>;

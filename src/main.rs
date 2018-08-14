@@ -9,6 +9,10 @@ use clap::{App, Arg};
 extern crate ansi_term;
 use self::ansi_term::Colour;
 
+extern crate failure;
+use self::failure::err_msg;
+use self::failure::Error;
+
 const VERSION_STR: &str = env!("CARGO_PKG_VERSION");
 
 fn main() {
@@ -30,6 +34,7 @@ fn main() {
     };
 
     let cnf = lexer::Lexer::run(filename);
+
     let dpll = Dpll::new(cnf);
 
     if let Some(mut result) = dpll.solver() {
