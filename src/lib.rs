@@ -1,2 +1,2 @@
-mod core;
 mod lexer;
+mod solver;

@@ -1,5 +1,5 @@
-mod core;
 mod lexer;
+mod solver;
 
 extern crate clap;
 use clap::{App, Arg};
@@ -31,7 +31,7 @@ fn main() {
 
     let mut assignment: Vec<isize> = Vec::new();
 
-    if let Some(mut result) = core::DPLL::solver(&mut cnf, &mut assignment) {
+    if let Some(mut result) = solver::DPLL::solver(&mut cnf, &mut assignment) {
         println!("{}", Colour::Blue.bold().paint("SATISFIABLE"));
         esort(&mut result);
         println!("{:?}", result);
