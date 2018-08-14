@@ -9,10 +9,6 @@ use clap::{App, Arg};
 extern crate ansi_term;
 use self::ansi_term::Colour;
 
-extern crate failure;
-use self::failure::err_msg;
-use self::failure::Error;
-
 const VERSION_STR: &str = env!("CARGO_PKG_VERSION");
 
 fn main() {
@@ -39,14 +35,14 @@ fn main() {
 
     if let Some(mut result) = dpll.solver() {
         println!("{}", Colour::Blue.bold().paint("SATISFIABLE"));
-        esort(&mut result.ass);
+        exsort(&mut result.ass);
         println!("{:?}", result.ass);
     } else {
         println!("{}", Colour::Red.bold().paint("UNSATISFYABLE"));
     }
 }
 
-fn esort(a: &mut Vec<isize>) {
+fn exsort(a: &mut Vec<isize>) {
     quick_iter(0, a.len() - 1, a);
 }
 
