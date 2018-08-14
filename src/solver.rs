@@ -38,6 +38,7 @@ impl Dpll {
         if let Some(dpll_r) = dpll.assign(-heuristic_lit).solver() {
             return Some(dpll_r);
         }
+
         None
     }
 }
@@ -56,8 +57,8 @@ impl Dpll {
         let c = dpll
             .cnf
             .into_iter()
-            .filter(|cl| !cl.iter().any(|l| *l == lit))
-            .map(|cl| retain_lit(cl, -lit))
+            .filter(|cl| !cl.iter().any(|l| *l == lit)) // delete clause whose have the lit
+            .map(|cl| retain_lit(cl, -lit))             // delete literal equaled -lit
             .collect();
         dpll.cnf = c;
         dpll
